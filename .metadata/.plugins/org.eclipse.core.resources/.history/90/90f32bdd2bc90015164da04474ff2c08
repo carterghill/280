@@ -1,0 +1,55 @@
+package assignment3;
+
+import lib280.base.Dispenser280;
+import lib280.tree.ArrayedBinaryTree280;
+import lib280.exception.*;
+
+public class ArrayedHeap280<I extends Comparable<? super I>> 
+			extends ArrayedBinaryTree280<I> implements Dispenser280<I>{
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param cap Maximum number of elements that can be in the tree.
+	 */
+	@SuppressWarnings("unchecked")
+	public ArrayedHeap280(int cap) {
+		super(cap);
+		this.items = (I[]) new Comparable[cap+1];
+	}
+
+	
+	@Override
+	/**
+	 * Adds an item of type I to the heap and sorts it according 
+	 * to size (item closer to top of heap if larger).
+	 */
+	public void insert(I x) throws ContainerFull280Exception,
+			DuplicateItems280Exception {
+		if( this.isFull() ) throw new ContainerFull280Exception("Cannot add item to a tree that is full.");
+		else {
+			count ++;
+			items[count] = x;
+		}
+		
+		for(int i = count; i > 0; i--){
+			if(items[i].compareTo(items[i-1]) > 0){
+				I[] temp = items.clone();
+				items[i-1] = temp[i];
+				items[i] = temp[i-1];
+			} else {
+				break;
+			}
+		}
+		
+	}
+
+	@Override
+	public void deleteItem() throws ItemNotFound280Exception  {
+		if(!this.itemExists()) throw new ItemNotFound280Exception();
+		
+		
+		
+	}
+
+}
