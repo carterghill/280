@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;Skill.java&apos; to &apos;assignment3/src/assignment3&apos;&#x0D;&#x0A;- Original project: &apos;lib280-asn3&apos;&#x0D;&#x0A;- Destination element: &apos;assignment3/src/assignment3&apos;&#x0D;&#x0A;- Original element: &apos;lib280.tree.Skill.java&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="=assignment3/src&lt;assignment3" element1="/src&lt;lib280.tree{Skill.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" patterns="*" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1454380499786" units="1" version="1.0"/>
+</session>
