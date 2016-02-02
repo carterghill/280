@@ -54,10 +54,10 @@ public class ArrayedHeap280<I extends Comparable<? super I>> extends
 
 	@Override
 	/** 
-	 * Remove the current item from the tree.
+	 * Remove the top item from the heap.
 	 * 
-	 * @precond The tree must not be empty.
-	 * @throws ContainerEmpty280Exception if the tree is empty.
+	 * @precond The heap must not be empty.
+	 * @throws ContainerEmpty280Exception if the heap is empty.
 	 */
 	public void deleteItem() throws ContainerEmpty280Exception {
 		if (this.isEmpty())
@@ -65,19 +65,23 @@ public class ArrayedHeap280<I extends Comparable<? super I>> extends
 
 		items[1] = items[count];
 		count--;
-		int currentIndex = 1;
+		this.currentNode = 1;
+		I firstItem = this.item();
+		
+		if(count > 2){
+			this.currentNode = largest(this.findLeftChild(currentNode),
+					this.findRightChild(currentNode));
+		} else if(count == 2 && largest(1,2) == 2){
+			this.items[1] = this.items[2];
+			this.items[2] = firstItem;
+		}
 
-		while (items[currentIndex].compareTo(items[largest(
-				this.findLeftChild(currentIndex),
-				this.findRightChild(currentIndex))]) < 0) {
-
-			int largestChildIndex = largest(this.findLeftChild(currentIndex),
-					this.findRightChild(currentIndex));
+		while (firstItem.compareTo(this.item()) < 0) {
 
 			I[] temp = items.clone();
 
-			items[currentIndex] = temp[largestChildIndex];
-			items[largestChildIndex] = temp[currentIndex];
+			items[this.findParent(currentNode)] = firstItem;
+			items[this.currentNode] = temp[this.findParent(currentNode)];
 
 		}
 
@@ -87,10 +91,22 @@ public class ArrayedHeap280<I extends Comparable<? super I>> extends
 	 * Return the index of the largest of two items (at indexes x and y)
 	 */
 	private int largest(int x, int y) {
-		if (items[x].compareTo(items[y]) > 0)
+		this.currentNode = x;
+		I itemX = this.item();
+		this.currentNode = y;
+		I itemY = this.item();
+		
+		if (itemX.compareTo(itemY) > 0)
 			return x;
 
 		return y;
+	}
+	
+	/**
+	 * @return item at top of heap
+	 */
+	private I viewTop(){
+		return this.items[1];
 	}
 
 	/**
@@ -100,8 +116,35 @@ public class ArrayedHeap280<I extends Comparable<? super I>> extends
 
 		ArrayedHeap280<Integer> H = new ArrayedHeap280<Integer>(10);
 
+		// IsEmpty on empty tree.
+		if (!H.isEmpty())
+			System.out.println("Test of isEmpty() on empty heap failed.");
+
+		// Test deleteItem() on empty tree.
+		Exception x = null;
+		try {
+			H.deleteItem();
+		} catch (ContainerEmpty280Exception e) {
+			x = e;
+		} finally {
+			if (x == null)
+				System.out.println("Expected exception deleting item in empty heap.  Got none.");
+		}
+		
+		//Only item is four, check if in the heap
 		H.insert(4);
-		H.toString();
+		if(!(H.viewTop()==4))
+			System.out.println("Test on insert(4) failed");
+		
+		//After inserting 3, four should stay on top
+		H.insert(3);
+		if(!(H.viewTop()==4))
+			System.out.println("Test on insert(3) failed");
+		
+		H.insert(2);
+		H.deleteItem();
+		if(!(H.viewTop()==3))
+			System.out.println("Test on deleteItem() failed");
 
 	}
 
