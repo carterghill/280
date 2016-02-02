@@ -1,3 +1,11 @@
+/**
+ * @author Carter Hill
+ * 11162143
+ * cgh418
+ * Assignment 3
+ * Question 3
+ */
+
 package assignment3;
 
 import lib280.base.Dispenser280;

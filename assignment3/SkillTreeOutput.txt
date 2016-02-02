@@ -1,0 +1,44 @@
+Carter Hill
+11162143
+cgh418
+CMPT 280
+Assignment 3
+
+Question 4 (d):
+
+My SkillTree:
+
+1: Crawl, Cost: 1
+     2: Walk, Cost: 2
+          3: Run, Cost: 3
+               4: Kick, Cost: 2
+                    5: Spin Kick, Cost: 5
+                    5: Flying Sidekick, Cost: 5
+     2: Slap, Cost: 1
+          3: Punch, Cost: 2
+               4: Block, Cost: 5
+                    5: Falcon PUNCH, Cost: 10
+                    5: Counter, Cost: 10
+
+==================================
+
+Falcon PUNCH dependencies:
+Crawl, Cost: 1, Slap, Cost: 1, Punch, Cost: 2, Block, Cost: 5, Falcon PUNCH, Cost: 10, 
+
+==================================
+
+Spin Kick with Kick as root:
+Kick, Cost: 2, Spin Kick, Cost: 5, 
+
+==================================
+
+Counter dependencies:
+Crawl, Cost: 1, Slap, Cost: 1, Punch, Cost: 2, Block, Cost: 5, Counter, Cost: 10, 
+
+==================================
+
+Falcon PUNCH skill cost should be 19 and it is: 19
+Crawl total skill cost should be 1 and it is: 1
+Kick total skill cost should be 8 and it is: 8
+
+Testing succeeded! Great success!
