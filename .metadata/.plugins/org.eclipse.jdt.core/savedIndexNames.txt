@@ -1,29 +1,4 @@
-INDEX VERSION 1.127+/Users/carter/Documents/280/.metadata/.plugins/org.eclipse.jdt.core
-767409092.index
-562313274.index
-3266567714.index
-3712507179.index
-1633303193.index
-1017193031.index
-105038433.index
-3428106734.index
-3570188632.index
-2545238116.index
-1271342938.index
-3518468346.index
-373590458.index
-2771943856.index
-2947572197.index
-1833648217.index
-1819685514.index
-3321539481.index
-3614820580.index
-3302703152.index
-3871163360.index
-156905802.index
-1080432954.index
-1384487945.index
-1751164890.index
-345190790.index
-3826594556.index
-2049706909.index
+INDEX VERSION 1.127+C:\Users\carte\Documents\280\.metadata\.plugins\org.eclipse.jdt.core
+698741851.index
+3082904056.index
+1869967683.index
