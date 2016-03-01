@@ -73,11 +73,7 @@ restoreAVLProperty(R)
 		
 		// Check if the item is less than the item at the root node
 		if(this.compareTo(data) <= 0) {
-			if(this.rootLeftSubtree().rootNode == null){
-				this.rootLeftSubtree().rootNode.setItem(data);
-			} else {
-				rootLeftSubtree().insert(data);
-			}
+			
 		}
 		
 	}
