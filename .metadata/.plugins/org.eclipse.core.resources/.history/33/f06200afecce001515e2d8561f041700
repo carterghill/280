@@ -1,0 +1,84 @@
+package lib280.tree;
+
+import lib280.base.LinearIterator280;
+import lib280.exception.AfterTheEnd280Exception;
+import lib280.exception.ContainerEmpty280Exception;
+import lib280.exception.NoCurrentItem280Exception;
+
+public class ArrayedBinaryTreeIterator280<I> extends ArrayedBinaryTreePosition280 implements LinearIterator280<I> {
+
+	// This is a reference to the tree that created this iterator object.
+	ArrayedBinaryTree280<I> tree;
+	
+	// An integer that represents the cursor position is inherited from
+	// ArrayedBinaryTreePosition280.
+	
+	/**
+	 * Create a new iterator from a given heap.
+	 * @param t The heap for which to create a new iterator.
+	 */
+	public ArrayedBinaryTreeIterator280(ArrayedBinaryTree280<I> t) {
+		super(t.currentNode);
+		this.tree = t;
+	}
+
+	@Override
+	/**
+	 * 
+	 */
+	public I item() throws NoCurrentItem280Exception {
+		// TODO Auto-generated method stub
+		return this.item();
+	}
+
+	@Override
+	public boolean itemExists() {
+		// TODO Auto-generated method stub
+		return !(this.item()==null);
+	}
+
+	@Override
+	public boolean before() {
+		return this.currentNode == 0;
+	}
+
+	@Override
+	public boolean after() {
+		return this.currentNode > 0 && !this.itemExists();
+	}
+
+	@Override
+	public void goForth() throws AfterTheEnd280Exception {
+		this.currentNode++;
+		if(this.after()) {
+			this.currentNode--;
+			throw new AfterTheEnd280Exception("Cannot advance cursor in the after position.");
+		}
+	}
+
+	@Override
+	public void goFirst() throws ContainerEmpty280Exception {
+		int x = this.currentNode;
+		this.currentNode = 1;
+		if( this.after() ) {
+			this.currentNode = x;
+			throw new ContainerEmpty280Exception("Cannot move to first item of an empty tree.");
+		}
+	}
+
+	@Override
+	public void goBefore() {
+		this.currentNode = 0;		
+	}
+
+	@Override
+	public void goAfter() {
+		while(!this.after()){
+			this.goForth();
+		}
+	}
+
+	// TODO
+	// Add methods from LinearIterator280 here.
+
+}
