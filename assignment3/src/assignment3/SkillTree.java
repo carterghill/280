@@ -6,17 +6,12 @@
  * Question 4
  */
 
-
 package assignment3;
 
 import lib280.exception.ContainerEmpty280Exception;
 import lib280.list.LinkedList280;
 import lib280.tree.BasicMAryTree280;
 
-/**
- * @author carte
- *
- */
 public class SkillTree extends BasicMAryTree280<Skill> {
 
 	/**	

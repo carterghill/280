@@ -1,0 +1,179 @@
+package assignment5;
+
+import lib280.exception.ContainerEmpty280Exception;
+import lib280.tree.BinaryNode280;
+import lib280.tree.LinkedSimpleTree280;
+import lib280.tree.SimpleTree280;
+
+public class AVLTree280<I extends Comparable<? super I>> implements SimpleTree280<I> {
+	
+	/**	Root node of the tree. */
+	protected AVLNode280<I> rootNode;
+
+	/**	Create an empty tree. <br>
+		Analysis: Time = O(1) */
+	public AVLTree280()
+	{
+		rootNode = null;
+	}
+
+	/**	Create a tree from a root and two subtrees. <
+		Analysis: Time = O(1) 
+		@param lt tree to initialize as the left subtree.  If null, the left subtree is empty.
+		@param r item to initialize as the root item
+		@param rt tree to initialize as the right subtree.  If null, the right subtree is empty. */
+	public AVLTree280(AVLTree280<I> lt, I r, AVLTree280<I> rt) 
+	{
+		rootNode = createNewNode(r);
+		setRootLeftSubtree(lt);
+		setRootRightSubtree(rt);
+	}
+
+	/*
+	 * // Recursively insert data into the tree rooted at R
+Algorithm insert(data, R)
+data is the element to be inserted
+R is the root of the tree in which to insert ’data’
+// This algorithm would only be called after making sure the tree // was non-empty. Insertion into an empty tree is a special case.
+if data <= R.item()
+if( R.leftChild == null )
+R.leftChild = new node containing data
+else
+insert(data, R.left)
+recompute R.leftSubtreeHeight // Can be done in constant time!
+else
+if( R.rightChild == null )
+R.rightChild = new node containing data
+else
+insert(data, R.right)
+recompute R.rightSubtreeHeight // Can be done in constant time!
+restoreAVLProperty(R)
+	 */
+
+	/**	Create a new node that is appropriate to this tree.  This method should be
+	overidden for classes that extend this class and need a specialized node,
+	i.e., a descendant of BinaryNode280. 
+	Analysis: Time = O(1) 
+	@param item    The item to be placed in the new node */
+	protected AVLNode280<I> createNewNode(I item){
+		return new AVLNode280<I>(item);
+	}
+	
+	public void insert(I data, AVLTree280<I> root){
+	
+	}
+
+	/**	Set the left subtree to t (set isEmpty if t == null). 
+	 *  @precond !isEmpty() 
+	 *  @param t tree to become the rootLeftSubtree() 
+	 */
+	public void setRootLeftSubtree(AVLTree280<I> t) throws ContainerEmpty280Exception{
+	
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot set subtree of an empty tree.");
+	
+		if (t != null)
+			rootNode.setLeftNode(t.rootNode);
+		else
+			rootNode.setLeftNode(null);
+	}
+
+	/**	Set the right subtree to t (set isEmpty if t == null). 
+	 *  @precond !isEmpty()
+	 *  @param t tree to become the rootRightSubtree() 
+	 */
+	public void setRootRightSubtree(AVLTree280<I> t) throws ContainerEmpty280Exception {
+	
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot set subtree of an empty tree.");
+	
+		if (t != null)
+			rootNode.setRightNode(t.rootNode);
+		else
+			rootNode.setRightNode(null);
+	}
+
+	@Override
+	/**	Is the tree empty?. */
+	public boolean isEmpty() {
+		return rootNode == null;
+	}
+
+	@Override
+	/**	Is the tree full?. */
+	public boolean isFull() {
+		return false;
+	}
+
+	@Override
+	/**	Remove all items from the tree. 
+	Analysis: Time = O(1) */
+	public void clear() {
+		setRootNode(null);
+	}
+
+	@Override
+	/**	Contents of the root item.
+	 *  @precond !isEmpty()
+	 */
+	public I rootItem() throws ContainerEmpty280Exception {
+		if (isEmpty()) 
+			throw new ContainerEmpty280Exception("Cannot access the root of an empty tree.");
+	
+		return rootNode.item();
+	}
+
+	/**	Right subtree of the root. 
+		Analysis: Time = O(1) 
+		@precond !isEmpty() 
+	 */
+	@Override
+	public AVLTree280<I> rootRightSubtree() throws ContainerEmpty280Exception {
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot return a subtree of an empty tree.");
+		
+		AVLTree280<I> result = (AVLTree280<I>) this.clone();
+		result.clear();
+		result.setRootNode(rootNode.rightNode());
+		return result;
+	}
+
+	private void setRootNode(AVLNode280<I> node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	/**	Left subtree of the root. 
+	Analysis: Time = O(1) 
+	@precond !isEmpty() 
+	 */
+	@Override
+	public AVLTree280<I> rootLeftSubtree() throws ContainerEmpty280Exception {
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot return a subtree of an empty tree.");
+		
+		AVLTree280<I> result = (AVLTree280<I>) this.clone();
+		result.clear();
+		result.setRootNode(rootNode.leftNode());
+		return result;
+	}
+	
+	/**	A shallow clone of this tree. 
+	Analysis: Time = O(1)
+	 */
+	@SuppressWarnings("unchecked")
+	public AVLTree280<I> clone(){
+	try
+	{
+		return (AVLTree280<I>) super.clone();
+	} catch(CloneNotSupportedException e)
+	{
+		/*	Should not occur because Container280 extends Cloneable */
+		e.printStackTrace();
+		return null;
+	}
+}
+
+	
+}
