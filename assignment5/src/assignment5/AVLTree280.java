@@ -1,7 +1,15 @@
+/**
+ * Carter Hill
+ * 11162143
+ * cgh418
+ * Assignment 5
+ * March 1st, 2016
+ */
+
 package assignment5;
 
 import lib280.exception.ContainerEmpty280Exception;
-import lib280.tree.SimpleTree280;
+import lib280.tree.MAryNode280;
 
 public class AVLTree280<I extends Comparable<? super I>> implements Cloneable, Comparable<I>{
 	
@@ -25,9 +33,9 @@ public class AVLTree280<I extends Comparable<? super I>> implements Cloneable, C
 		setRootLeftSubtree(lt);
 		setRootRightSubtree(rt);
 		
-		// This function will only be used for the first node of the tree, 
-		// thus we must initialize the height
-		rootNode.height = 1; 
+		// Initialize height to 1
+		rootNode.setLeftHeight(1);
+		rootNode.setRightHeight(1);
 	}
 
 	/*
@@ -72,14 +80,125 @@ restoreAVLProperty(R)
 			throw new ContainerEmpty280Exception("Tree must be non-empty");
 		
 		// Check if the item is less than the item at the root node
-		if(this.compareTo(data) <= 0) {
-			if(this.rootLeftSubtree().rootNode == null){
-				this.rootLeftSubtree().rootNode.setItem(data);
+		if(this.compareTo(data) > 0) {
+			rootNode.setLeftHeight(rootNode.leftHeight()+1);// Height of root will increase on insertion
+			if(this.rootNode.leftHeight == 2){
+				
+				AVLTree280<I> x = new AVLTree280<I>(new AVLTree280<I>(), data,new AVLTree280<I>());
+				this.setRootLeftSubtree(x);
+				AVLNode280<I> y = new AVLNode280<I>(data);
+				this.rootLeftSubtree().setRootNode(y);
+				
 			} else {
+				
 				rootLeftSubtree().insert(data);
 			}
+		} else { 
+			// If item is equal to or greater than the item at root
+			rootNode.setRightHeight(rootNode.rightHeight()+1);// Height of root will increase on insertion
+			if(this.rootNode.rightHeight == 2){
+				
+				AVLTree280<I> x = new AVLTree280<I>(new AVLTree280<I>(), data,new AVLTree280<I>());
+				this.setRootRightSubtree(x);
+				this.rootRightSubtree().setRootNode(new AVLNode280<I>(data));
+				
+			} else {
+				rootRightSubtree().insert(data);
+			}		
+		}		
+		this.restore();	
+	}
+	
+	/** Restore AVL property of the tree */
+	public void restore(){
+		//System.out.println(this.rootNode.leftHeight() + " : " + this.rootNode.rightHeight());
+		if(this.rootNode.leftHeight() == 3 && this.rootNode.rightHeight() == 1){
+			this.restoreLeft();
+		} else if (this.rootNode.rightHeight() == 3 && this.rootNode.leftHeight() == 1){
+			//System.out.println("hi");
+			this.restoreRight();
+		} else {
+			if(!this.rootLeftSubtree().isEmpty())
+				this.rootLeftSubtree().restore();
+			if(!this.rootRightSubtree().isEmpty())
+				this.rootRightSubtree().restore();
 		}
 		
+		
+	}
+	
+	/** Restore if left heavy */
+	private void restoreLeft(){
+		AVLTree280<I> x = new AVLTree280<I>();
+		x.setRootNode(this.rootNode.leftNode());
+		AVLTree280<I> y = new AVLTree280<I>();
+		I item = this.rootItem();
+		
+		if(x.rootNode.rightHeight() > x.rootNode.leftHeight()){
+			y.setRootNode(x.rootNode.rightNode());
+			y.rootNode.setLeftNode(x.rootNode);
+			this.rootNode.setLeftNode(y.rootNode);
+			x.rootNode.setRightNode(null);
+			this.setRootLeftSubtree(null);
+			y.rootNode.setRightNode(this.rootNode);
+			this.setRootNode(y.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			y.rootNode.setLeftHeight(2);
+			y.rootNode.setRightHeight(2);
+		}else{
+			y.setRootNode(x.rootNode.rightNode());
+			this.setRootLeftSubtree(null);
+			x.rootNode.setRightNode(this.rootNode);
+			this.setRootNode(x.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			x.rootNode.setLeftHeight(2);
+			x.rootNode.setRightHeight(2);
+		}
+	}
+	
+	/** Restore if left heavy */
+	private void restoreRight(){
+		AVLTree280<I> x = new AVLTree280<I>();
+		x.setRootNode(this.rootNode.rightNode());
+		AVLTree280<I> y = new AVLTree280<I>();
+		
+		if(x.rootNode.rightHeight() > x.rootNode.leftHeight()){
+			y.setRootNode(x.rootNode.rightNode());
+			this.setRootRightSubtree(null);
+			x.rootNode.setLeftNode(this.rootNode);
+			this.setRootNode(x.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			x.rootNode.setLeftHeight(2);
+			x.rootNode.setRightHeight(2);
+		}else{
+			y.setRootNode(x.rootNode.leftNode());
+			y.rootNode.setRightNode(x.rootNode);
+			this.rootNode.setRightNode(y.rootNode);
+			x.rootNode.setLeftNode(null);
+			this.setRootRightSubtree(null);
+			y.rootNode.setLeftNode(this.rootNode);
+			this.setRootNode(y.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			y.rootNode.setLeftHeight(2);
+			y.rootNode.setRightHeight(2);
+		}
+	}
+	
+	public void delete(I x){
+		
+		if(this.rootNode.item().compareTo(x) == 0){ //item and root node equal
+			if(this.rootNode.leftHeight() > 1){
+				// Not finished, unfortunately 
+			}
+		} else if (this.rootNode.item().compareTo(x) > 0 && this.rootNode.leftNode() != null){
+			this.rootLeftSubtree().delete(x); //search left if x is lower
+		} else if (this.rootNode.item().compareTo(x) < 0 && this.rootNode.rightNode() != null){
+			this.rootRightSubtree().search(x); // search right if x is higher
+		}		
 	}
 	
 	/** Compare the tree's item with another tree */
@@ -87,7 +206,7 @@ restoreAVLProperty(R)
 	public int compareTo(I o) { 
 		return this.rootItem().compareTo(o);
 	}
-
+	
 	/**	Set the left subtree to t (set isEmpty if t == null). 
 	 *  @precond !isEmpty() 
 	 *  @param t tree to become the rootLeftSubtree() 
@@ -128,8 +247,7 @@ restoreAVLProperty(R)
 		return false;
 	}
 
-	/**	Remove all items from the tree. 
-	Analysis: Time = O(1) */
+	/**	Remove all items from the tree. */
 	public void clear() {
 		setRootNode(null);
 	}
@@ -152,8 +270,7 @@ restoreAVLProperty(R)
 		if (isEmpty())
 			throw new ContainerEmpty280Exception("Cannot return a subtree of an empty tree.");
 		
-		AVLTree280<I> result = (AVLTree280<I>) this.clone();
-		result.clear();
+		AVLTree280<I> result = new AVLTree280<I>();
 		result.setRootNode(rootNode.rightNode());
 		return result;
 	}
@@ -175,8 +292,7 @@ restoreAVLProperty(R)
 		if (isEmpty())
 			throw new ContainerEmpty280Exception("Cannot return a subtree of an empty tree.");
 		
-		AVLTree280<I> result = (AVLTree280<I>) this.clone();
-		result.clear();
+		AVLTree280<I> result = new AVLTree280<I>();
 		result.setRootNode(rootNode.leftNode());
 		return result;
 	}
@@ -195,5 +311,39 @@ restoreAVLProperty(R)
 			return null;
 		}
 	}
-	
+
+	/**
+	 * Searches tree for item
+	 * @param x - Item to be searched for
+	 * @return - true if item present, false otherwise
+	 */
+	public Boolean search(I x){
+
+		if(this.rootNode.item().compareTo(x) == 0){ //item and root node equal
+			return true;
+		} else if (this.rootNode.item().compareTo(x) > 0 && this.rootNode.leftNode() != null){
+			return this.rootLeftSubtree().search(x); //search left if x is lower
+		} else if (this.rootNode.item().compareTo(x) < 0&& this.rootNode.rightNode() != null){
+			return this.rootRightSubtree().search(x); // search right if x is higher
+		}
+		return false;	
+	}
+
+	public static void main(String[] args) {
+		AVLTree280<Integer> t = new AVLTree280<Integer>(null,4,null);
+		t.insert(6);
+		t.insert(5);
+		
+		if(t.rootNode.leftHeight() == 2 && t.rootNode.rightHeight() == 2){
+			System.out.println("First height test succeeded");
+		} else {
+			System.out.println("First height test failed");
+		}
+
+		if(t.search(6) && t.search(5) && t.search(4) && !t.search(13)){
+			System.out.println("Search functional");
+		}else{
+			System.out.println("search failed");
+		}
+	}
 }

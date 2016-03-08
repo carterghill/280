@@ -1,0 +1,335 @@
+package assignment5;
+
+import lib280.exception.ContainerEmpty280Exception;
+import lib280.tree.MAryNode280;
+
+public class AVLTree280<I extends Comparable<? super I>> implements Cloneable, Comparable<I>{
+	
+	/**	Root node of the tree. */
+	protected AVLNode280<I> rootNode;
+
+	/**	Create an empty tree. */
+	public AVLTree280()
+	{
+		rootNode = null;
+	}
+
+	/**	Create a tree from a root and two subtrees. <
+		Analysis: Time = O(1) 
+		@param lt tree to initialize as the left subtree.  If null, the left subtree is empty.
+		@param r item to initialize as the root item
+		@param rt tree to initialize as the right subtree.  If null, the right subtree is empty. */
+	public AVLTree280(AVLTree280<I> lt, I r, AVLTree280<I> rt) 
+	{
+		rootNode = createNewNode(r);
+		setRootLeftSubtree(lt);
+		setRootRightSubtree(rt);
+		
+		// Initialize height to 1
+		rootNode.setLeftHeight(1);
+		rootNode.setRightHeight(1);
+	}
+
+	/*
+	 * // Recursively insert data into the tree rooted at R
+Algorithm insert(data, R)
+data is the element to be inserted
+R is the root of the tree in which to insert ’data’
+// This algorithm would only be called after making sure the tree 
+// was non-empty. Insertion into an empty tree is a special case.
+if data <= R.item()
+if( R.leftChild == null )
+R.leftChild = new node containing data
+else
+insert(data, R.left)
+recompute R.leftSubtreeHeight // Can be done in constant time!
+else
+if( R.rightChild == null )
+R.rightChild = new node containing data
+else
+insert(data, R.right)
+recompute R.rightSubtreeHeight // Can be done in constant time!
+restoreAVLProperty(R)
+	 */
+
+	/**	Create a new node that is appropriate to this tree.  This method should be
+	overidden for classes that extend this class and need a specialized node,
+	i.e., a descendant of BinaryNode280. 
+	Analysis: Time = O(1) 
+	@param item    The item to be placed in the new node */
+	protected AVLNode280<I> createNewNode(I item){
+		return new AVLNode280<I>(item);
+	}
+	
+	/**
+	 * Recursively insert data into the tree
+	 * @param data - The new item to be stored in the tree
+	 * @throws ContainerEmpty280Exception - Cannot use insert on empty tree
+	 */
+	public void insert(I data) throws ContainerEmpty280Exception{
+		
+		if(this.isEmpty())
+			throw new ContainerEmpty280Exception("Tree must be non-empty");
+		
+		// Check if the item is less than the item at the root node
+		if(this.compareTo(data) > 0) {
+			rootNode.setLeftHeight(rootNode.leftHeight()+1);// Height of root will increase on insertion
+			if(this.rootNode.leftHeight == 2){
+				
+				AVLTree280<I> x = new AVLTree280<I>(new AVLTree280<I>(), data,new AVLTree280<I>());
+				this.setRootLeftSubtree(x);
+				AVLNode280<I> y = new AVLNode280<I>(data);
+				this.rootLeftSubtree().setRootNode(y);
+				
+			} else {
+				
+				rootLeftSubtree().insert(data);
+			}
+		} else { 
+			// If item is equal to or greater than the item at root
+			rootNode.setRightHeight(rootNode.rightHeight()+1);// Height of root will increase on insertion
+			if(this.rootNode.rightHeight == 2){
+				
+				AVLTree280<I> x = new AVLTree280<I>(new AVLTree280<I>(), data,new AVLTree280<I>());
+				this.setRootRightSubtree(x);
+				this.rootRightSubtree().setRootNode(new AVLNode280<I>(data));
+				
+			} else {
+				rootRightSubtree().insert(data);
+			}		
+		}		
+		this.restore(null);	
+	}
+	
+	/** Restore AVL property of the tree */
+	public void restore(AVLTree280<I> parent){
+		//System.out.println(this.rootNode.leftHeight() + " : " + this.rootNode.rightHeight());
+		if(this.rootNode.leftHeight() == 3 && this.rootNode.rightHeight() == 1){
+			this.restoreLeft();
+		} else if (this.rootNode.rightHeight() == 3 && this.rootNode.leftHeight() == 1){
+			//System.out.println("hi");
+			this.restoreRight();
+		} else {
+			if(!this.rootLeftSubtree().isEmpty())
+				this.rootLeftSubtree().restore(null);
+			if(!this.rootRightSubtree().isEmpty())
+				this.rootRightSubtree().restore(null);
+		}
+		
+		
+	}
+	
+	/** Restore if left heavy */
+	private void restoreLeft(){
+		AVLTree280<I> x = new AVLTree280<I>();
+		x.setRootNode(this.rootNode.leftNode());
+		AVLTree280<I> y = new AVLTree280<I>();
+		I item = this.rootItem();
+		
+		if(x.rootNode.rightHeight() > x.rootNode.leftHeight()){
+			y.setRootNode(x.rootNode.rightNode());
+			y.rootNode.setLeftNode(x.rootNode);
+			this.rootNode.setLeftNode(y.rootNode);
+			x.rootNode.setRightNode(null);
+			this.setRootLeftSubtree(null);
+			y.rootNode.setRightNode(this.rootNode);
+			this.setRootNode(y.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			y.rootNode.setLeftHeight(2);
+			y.rootNode.setRightHeight(2);
+		}else{
+			y.setRootNode(x.rootNode.rightNode());
+			this.setRootLeftSubtree(null);
+			x.rootNode.setRightNode(this.rootNode);
+			this.setRootNode(x.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			x.rootNode.setLeftHeight(2);
+			x.rootNode.setRightHeight(2);
+		}
+	}
+	
+	/** Restore if left heavy */
+	private void restoreRight(){
+		AVLTree280<I> x = new AVLTree280<I>();
+		x.setRootNode(this.rootNode.rightNode());
+		AVLTree280<I> y = new AVLTree280<I>();
+		
+		if(x.rootNode.rightHeight() > x.rootNode.leftHeight()){
+			y.setRootNode(x.rootNode.rightNode());
+			this.setRootRightSubtree(null);
+			x.rootNode.setLeftNode(this.rootNode);
+			this.setRootNode(x.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			x.rootNode.setLeftHeight(2);
+			x.rootNode.setRightHeight(2);
+		}else{
+			y.setRootNode(x.rootNode.leftNode());
+			y.rootNode.setRightNode(x.rootNode);
+			this.rootNode.setRightNode(y.rootNode);
+			x.rootNode.setLeftNode(null);
+			this.setRootRightSubtree(null);
+			y.rootNode.setLeftNode(this.rootNode);
+			this.setRootNode(y.rootNode);
+			this.rootNode.setLeftHeight(1);
+			this.rootNode.setRightHeight(1);
+			y.rootNode.setLeftHeight(2);
+			y.rootNode.setRightHeight(2);
+		}
+	}
+	
+	/** Compare the tree's item with another tree */
+	@Override
+	public int compareTo(I o) { 
+		return this.rootItem().compareTo(o);
+	}
+	
+	/**	Set the left subtree to t (set isEmpty if t == null). 
+	 *  @precond !isEmpty() 
+	 *  @param t tree to become the rootLeftSubtree() 
+	 */
+	public void setRootLeftSubtree(AVLTree280<I> t) throws ContainerEmpty280Exception{
+	
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot set subtree of an empty tree.");
+	
+		if (t != null)
+			rootNode.setLeftNode(t.rootNode);
+		else
+			rootNode.setLeftNode(null);
+	}
+
+	/**	Set the right subtree to t (set isEmpty if t == null). 
+	 *  @precond !isEmpty()
+	 *  @param t tree to become the rootRightSubtree() 
+	 */
+	public void setRootRightSubtree(AVLTree280<I> t) throws ContainerEmpty280Exception {
+	
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot set subtree of an empty tree.");
+	
+		if (t != null)
+			rootNode.setRightNode(t.rootNode);
+		else
+			rootNode.setRightNode(null);
+	}
+
+	/**	Is the tree empty?. */
+	public boolean isEmpty() {
+		return rootNode == null;
+	}
+	
+	/**	Is the tree full?. */
+	public boolean isFull() {
+		return false;
+	}
+
+	/**	Remove all items from the tree. */
+	public void clear() {
+		setRootNode(null);
+	}
+
+	/**	Contents of the root item.
+	 *  @precond !isEmpty()
+	 */
+	public I rootItem() throws ContainerEmpty280Exception {
+		if (isEmpty()) 
+			throw new ContainerEmpty280Exception("Cannot access the root of an empty tree.");
+	
+		return rootNode.item();
+	}
+
+	/**	Right subtree of the root. 
+		Analysis: Time = O(1) 
+		@precond !isEmpty() 
+	 */
+	public AVLTree280<I> rootRightSubtree() throws ContainerEmpty280Exception {
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot return a subtree of an empty tree.");
+		
+		AVLTree280<I> result = new AVLTree280<I>();
+		result.setRootNode(rootNode.rightNode());
+		return result;
+	}
+
+	/**
+	 * Sets current tree's root node
+	 * @param node : The tree's new root node
+	 */
+	private void setRootNode(AVLNode280<I> node) {
+		this.rootNode = node;
+	}
+
+	
+	/**	Left subtree of the root. 
+	Analysis: Time = O(1) 
+	@precond !isEmpty() 
+	 */
+	public AVLTree280<I> rootLeftSubtree() throws ContainerEmpty280Exception {
+		if (isEmpty())
+			throw new ContainerEmpty280Exception("Cannot return a subtree of an empty tree.");
+		
+		AVLTree280<I> result = new AVLTree280<I>();
+		result.setRootNode(rootNode.leftNode());
+		return result;
+	}
+	
+	/**	A shallow clone of this tree. 
+	Analysis: Time = O(1)
+	 */
+	@SuppressWarnings("unchecked")
+	public AVLTree280<I> clone(){
+		try {
+			return (AVLTree280<I>) super.clone();
+		} catch(CloneNotSupportedException e)
+		{
+			/*	Should not occur because Container280 extends Cloneable */
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Searches tree for item
+	 * @param x - Item to be searched for
+	 * @return - true if item present, false otherwise
+	 */
+	public Boolean search(I x){
+		System.out.println(this.rootNode.item());
+		System.out.println(x);
+		System.out.println(this.rootNode.item().compareTo(x));
+		System.out.println("-------------------");
+		if(this.rootNode.item().compareTo(x) == 0){ //item and root node equal
+			return true;
+		} else if (this.rootNode.item().compareTo(x) < 0 && this.rootNode.leftNode() != null){
+			return this.rootLeftSubtree().search(x); //search left if x is lower
+		} else if (this.rootNode.item().compareTo(x) > 0){
+			System.out.println("hi");
+			return this.rootRightSubtree().search(x); // search right if x is higher
+		}
+		return false;	
+	}
+
+	public static void main(String[] args) {
+		AVLTree280<Integer> t = new AVLTree280<Integer>(null,4,null);
+		t.insert(6);
+		t.insert(5);
+		
+		if(t.rootNode.leftHeight() == 2 && t.rootNode.rightHeight() == 2){
+			System.out.println("First height test succeeded");
+		} else {
+			System.out.println("First height test failed");
+		}
+
+		if(t.search(6)){
+			System.out.println("Search functional");
+		}else{
+			System.out.println("search failed");
+		}
+		
+		System.out.println(t.rootRightSubtree().rootItem());
+
+	}
+}

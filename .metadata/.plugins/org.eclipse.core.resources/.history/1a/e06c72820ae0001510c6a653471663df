@@ -1,0 +1,110 @@
+package assignment5;
+
+import lib280.exception.Exception280;
+
+public class AVLNode280 <I extends Comparable<? super I>> implements Cloneable, Comparable<AVLNode280<I>>{
+	
+	/** Contents of the node. */
+	protected I item;
+
+	/** The left node. */
+	protected AVLNode280<I> leftNode;
+
+	/** The right node. */
+	protected AVLNode280<I> rightNode;
+	
+	/** The height on the node */
+	protected int height;
+	
+	/** The parent of the node */
+	protected AVLNode280<I> parent;
+
+	@Override
+	public int compareTo(AVLNode280<I> o) {
+		return this.item.compareTo(o.item);
+	}
+
+	/** Construct a new node with item x. 
+	 *  @timing Time = O(1)
+	 *  @param x the item placed in the new node */	
+	public AVLNode280(I x) {
+		this.item = x;
+	}
+
+	/** Contents of the node.
+	 *  @timing Time = O(1) */
+	public I item()
+	{
+		return item;
+	}
+	
+	/** Height of the node. */
+	public int height()
+	{
+		return height;
+	}
+	
+	/** Return the parent of the node.*/
+	public AVLNode280<I> parent() throws Exception280{
+		
+		if(!hasParent()) {
+			throw new Exception280("Node has no parent");
+		}
+		
+		return parent;
+	}
+	
+	/**	Is the tree empty?. */
+	public boolean hasParent() {
+		return height > 1;
+	}
+
+	/** The left node. */
+	public AVLNode280<I> leftNode()
+	{
+		return leftNode;
+	}
+	
+	/** The left node. */
+	public AVLNode280<I> rightNode()
+	{
+		return rightNode;
+	}
+		
+	/**
+	 * Set the item contained in the node.
+	 * @param x The new item to store in the node.
+	 * @timing Time = O(1)
+	 * */	
+	public void setItem(I x) {
+		this.item = x;
+	}
+	
+	/**
+	 * Set the left child of this node
+	 * @param n The new left child of this node.
+	 */
+	public void setLeftNode(AVLNode280<I> n) {
+		this.leftNode = n;
+		this.leftNode.height = this.height + 1; // The height will always +1 of the parent
+		this.leftNode.parent = this; // Set current node the parent of the child for faster access
+	}
+	
+	/**
+	 * Set the right child of this node.
+	 * @param n The new right child of this node.
+	 */
+	public void setRightNode(AVLNode280<I> n) {
+		this.rightNode = n;
+		this.rightNode.height = this.height + 1; // The height will always +1 of the parent
+		this.rightNode.parent = this; // Set current node the parent of the child for faster access
+	}
+	
+	/**
+	 * Returns a string representation of the item contained within the node.
+	 */
+	public String toString() {
+		return this.item.toString();
+	}
+	
+}

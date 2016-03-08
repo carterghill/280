@@ -1,3 +1,11 @@
+/**
+ * Carter Hill
+ * 11162143
+ * cgh418
+ * Assignment 5
+ * March 1st, 2016
+ */
+
 package assignment5;
 
 import lib280.exception.Exception280;
@@ -13,8 +21,11 @@ public class AVLNode280 <I extends Comparable<? super I>> implements Cloneable, 
 	/** The right node. */
 	protected AVLNode280<I> rightNode;
 	
-	/** The height on the node */
-	protected int height;
+	/** Height of the left side of tree */
+	protected int leftHeight;
+	
+	/** Height of the right side of tree */
+	protected int rightHeight;
 	
 	/** The parent of the node */
 	protected AVLNode280<I> parent;
@@ -38,25 +49,39 @@ public class AVLNode280 <I extends Comparable<? super I>> implements Cloneable, 
 		return item;
 	}
 	
-	/** Height of the node. */
-	public int height()
-	{
-		return height;
+	/** Get the height of the tree */
+	public int rightHeight(){
+		return rightHeight;
+	}
+	
+	/** Set the height of the tree */
+	public void setRightHeight(int x){
+		rightHeight = x;
+	}
+	
+	/** Get the height of the tree */
+	public int leftHeight(){
+		return leftHeight;
+	}
+	
+	/** Set the height of the tree */
+	public void setLeftHeight(int x){
+		leftHeight = x;
 	}
 	
 	/** Return the parent of the node.*/
 	public AVLNode280<I> parent() throws Exception280{
 		
-		if(!hasParent()) {
-			throw new Exception280("Node has no parent");
-		}
+		//if(!hasParent()) {
+			//throw new Exception280("Node has no parent");
+		//}
 		
 		return parent;
 	}
 	
-	/**	Is the tree empty?. */
+	/**	Does the node have a parent? */
 	public boolean hasParent() {
-		return height > 1;
+		return parent != null;
 	}
 
 	/** The left node. */
@@ -86,8 +111,7 @@ public class AVLNode280 <I extends Comparable<? super I>> implements Cloneable, 
 	 */
 	public void setLeftNode(AVLNode280<I> n) {
 		this.leftNode = n;
-		this.leftNode.height = this.height + 1; // The height will always +1 of the parent
-		this.leftNode.parent = this; // Set current node the parent of the child for faster access
+		//this.leftHeight = this.leftHeight + 1;
 	}
 	
 	/**
@@ -96,8 +120,6 @@ public class AVLNode280 <I extends Comparable<? super I>> implements Cloneable, 
 	 */
 	public void setRightNode(AVLNode280<I> n) {
 		this.rightNode = n;
-		this.rightNode.height = this.height + 1; // The height will always +1 of the parent
-		this.rightNode.parent = this; // Set current node the parent of the child for faster access
 	}
 	
 	/**
