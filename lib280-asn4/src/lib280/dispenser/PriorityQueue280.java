@@ -1,3 +1,11 @@
+/**
+ * Carter Hill
+ * 11162143
+ * cgh418
+ * CMPT 280
+ * Assignment 4
+ */
+
 package lib280.dispenser;
 
 import lib280.exception.ContainerEmpty280Exception;
@@ -272,7 +280,6 @@ public class PriorityQueue280<I extends Comparable<? super I>> {
 		if( Q.maxItem().item.compareTo("Fly")!=0) System.out.println("Front of queue should be 'Fly' but it's not.");
 
 		Q.insert(new PriorityItem<String>("Scream", 2.0));
-		Q.insert(new PriorityItem<String>("Run", 2.0));
 
 		if( Q.maxItem().item.compareTo("Fly")!=0) System.out.println("Front of queue should be 'Fly' but it's not.");
 		
@@ -280,7 +287,6 @@ public class PriorityQueue280<I extends Comparable<? super I>> {
 		Q.deleteAllMax();
 		if( Q.maxItem().item.compareTo("Scream")!=0) System.out.println("Front of queue should be 'Scream' but it's not.");
 		if( Q.minItem().item.compareTo("Scream") != 0) System.out.println("minItem() should be 'Scream' but it's not.");
-		Q.deleteAllMax();
 		Q.deleteAllMax();
 
 		// Queue should now be empty again.

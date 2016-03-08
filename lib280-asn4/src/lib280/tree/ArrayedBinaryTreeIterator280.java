@@ -1,3 +1,11 @@
+/**
+ * Carter Hill
+ * 11162143
+ * cgh418
+ * CMPT 280
+ * Assignment 4
+ */
+
 package lib280.tree;
 
 import lib280.base.LinearIterator280;

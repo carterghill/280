@@ -1,3 +1,12 @@
+/**
+ * Carter Hill
+ * 11162143
+ * cgh418
+ * CMPT 280
+ * Assignment 4
+ */
+
+
 package lib280.tree;
 
 public class IterableArrayedHeap280<I extends Comparable<? super I>> extends ArrayedHeap280<I>  {
