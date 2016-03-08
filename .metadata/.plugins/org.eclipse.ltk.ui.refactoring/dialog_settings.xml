@@ -4,6 +4,7 @@
 		<item value="600" key="width"/>
 		<item value="400" key="height"/>
 	</section>
+<<<<<<< HEAD
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
 		<item value="false" key="moveWizard.updateQualifiedNames"/>
 		<item value="*" key="patterns"/>
@@ -17,4 +18,6 @@
 		<item value="true" key="leaveUnconstrainedRaw"/>
 		<item value="true" key="assumeCloneReturnsSameType"/>
 	</section>
+=======
+>>>>>>> f2fecb01c04c3f1864a9edce723e95bfab4172a3
 </section>

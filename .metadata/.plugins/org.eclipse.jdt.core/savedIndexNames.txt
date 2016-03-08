@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.127+C:\Users\carte\Documents\280\.metadata\.plugins\org.eclipse.jdt.core
 3951094714.index
 3449116704.index
@@ -24,3 +25,12 @@ INDEX VERSION 1.127+C:\Users\carte\Documents\280\.metadata\.plugins\org.eclipse.
 4210772659.index
 249459504.index
 1755913921.index
+=======
+INDEX VERSION 1.127+/Users/carter/Documents/280/.metadata/.plugins/org.eclipse.jdt.core
+2491401843.index
+3586295666.index
+3826594556.index
+1288427208.index
+1017193031.index
+225875913.index
+>>>>>>> f2fecb01c04c3f1864a9edce723e95bfab4172a3

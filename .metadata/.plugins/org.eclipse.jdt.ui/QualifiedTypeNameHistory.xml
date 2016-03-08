@@ -2,7 +2,5 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="lib280.tree.ArrayedBinaryTree280"/>
 <fullyQualifiedTypeName name="lib280.base.Dispenser280"/>
-<fullyQualifiedTypeName name="lib280.tree.ArrayedBinaryTreeIterator280"/>
-<fullyQualifiedTypeName name="java.util.Arrays"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="lib280.exception.Exception280"/>
 </qualifiedTypeNameHistroy>
